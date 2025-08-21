@@ -1,0 +1,43 @@
+[ 189]  .
+├── [ 834]  docker-compose.yml
+├── [ 552]  Dockerfile
+├── [ 34K]  LICENSE
+├── [ 74K]  logs.txt
+├── [4.6K]  README_DOCKER.md
+├── [ 212]  requirements.txt
+├── [2.9K]  run_docker.sh
+├── [ 118]  src
+│   ├── [ 22K]  admin_app.py
+│   ├── [  20]  database
+│   │   └── [ 24K]  app.db
+│   ├── [   0]  __init__.py
+│   ├── [4.3K]  main.py
+│   ├── [  36]  models
+│   │   ├── [2.1K]  book.py
+│   │   └── [ 482]  user.py
+│   ├── [  52]  routes
+│   │   ├── [ 20K]  admin.py
+│   │   ├── [4.3K]  book.py
+│   │   └── [1.2K]  user.py
+│   └── [ 113]  static
+│       ├── [9.3K]  admin.html
+│       ├── [  23]  css
+│       │   └── [6.6K]  style.css
+│       ├── [ 15K]  favicon.ico
+│       ├── [4.0K]  images
+│       │   ├── [280K]  20250821_114534.jpg
+│       │   ├── [263K]  20250821_114551.jpg
+│       │   ├── [399K]  20250821_114612.jpg
+│       │   ├── [352K]  20250821_114624.jpg
+│       │   ├── [353K]  20250821_114634.jpg
+│       │   ├── [290K]  20250821_114647.jpg
+│       │   ├── [139K]  20250821_114759.jpg
+│       │   ├── [204K]  20250821_114936.jpg
+│       │   └── [334K]  20250821_114942.jpg
+│       ├── [2.7K]  index.html
+│       ├── [  23]  js
+│       │   └── [9.5K]  script.js
+│       └── [4.0K]  README.md
+└── [   0]  tree.txt
+
+9 directories, 32 files

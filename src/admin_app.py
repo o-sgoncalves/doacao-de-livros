@@ -644,7 +644,7 @@ def create_book():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    with admin_app.app_context():
-        db.create_all()
+#    with admin_app.app_context():
+#        db.create_all()
     admin_app.run(host='0.0.0.0', port=5001, debug=True)
 

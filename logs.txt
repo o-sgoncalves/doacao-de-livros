@@ -1,0 +1,29 @@
+book-donation-admin  |  * Serving Flask app 'admin_app'
+book-donation-admin  |  * Debug mode: on
+book-donation-admin  | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+book-donation-admin  |  * Running on all addresses (0.0.0.0)
+book-donation-admin  |  * Running on http://127.0.0.1:5001
+book-donation-admin  |  * Running on http://172.18.0.3:5001
+book-donation-admin  | [33mPress CTRL+C to quit[0m
+book-donation-admin  |  * Restarting with stat
+book-donation-admin  |  * Debugger is active!
+book-donation-admin  |  * Debugger PIN: 122-086-574
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:50] "GET / HTTP/1.1" 200 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:50] "[35m[1mGET /api/reservations HTTP/1.1[0m" 500 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:50] "GET /favicon.ico HTTP/1.1" 200 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:54] "GET / HTTP/1.1" 200 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:54] "[35m[1mGET /api/reservations HTTP/1.1[0m" 500 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:54] "GET / HTTP/1.1" 200 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:54] "[35m[1mGET /api/reservations HTTP/1.1[0m" 500 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:55] "GET / HTTP/1.1" 200 -
+book-donation-admin  | 172.18.0.1 - - [21/Aug/2025 16:41:55] "[35m[1mGET /api/reservations HTTP/1.1[0m" 500 -
+book-donation-app    |  * Serving Flask app 'main'
+book-donation-app    |  * Debug mode: on
+book-donation-app    | [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+book-donation-app    |  * Running on all addresses (0.0.0.0)
+book-donation-app    |  * Running on http://127.0.0.1:5001
+book-donation-app    |  * Running on http://172.18.0.2:5001
+book-donation-app    | [33mPress CTRL+C to quit[0m
+book-donation-app    |  * Restarting with stat
+book-donation-app    |  * Debugger is active!
+book-donation-app    |  * Debugger PIN: 634-367-855
