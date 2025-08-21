@@ -1,0 +1,345 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+
+header {
+    background: linear-gradient(135deg, #6B46C1 0%, #3B82F6 100%);
+    color: white;
+    padding: 2em 0;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+    font-size: 1.2em;
+    font-weight: 300;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+main {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    margin-top: -20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+#book-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.book-card {
+    border: none;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.book-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6B46C1, #3B82F6, #10B981);
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.book-card img {
+    max-width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.book-card h3 {
+    margin: 15px 0 10px 0;
+    color: #2D3748;
+    font-size: 1.3em;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.book-card p {
+    margin: 8px 0;
+    color: #4A5568;
+    line-height: 1.5;
+}
+
+.book-card p strong {
+    color: #2D3748;
+    font-weight: 600;
+}
+
+.book-card button {
+    background: linear-gradient(135deg, #6B46C1 0%, #3B82F6 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(107, 70, 193, 0.3);
+}
+
+.book-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 70, 193, 0.4);
+}
+
+.book-card button:disabled {
+    background: linear-gradient(135deg, #CBD5E0 0%, #A0AEC0 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.book-card button.remove-btn {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.book-card button.remove-btn:hover {
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+#reservation-form {
+    margin-top: 50px;
+    padding: 40px;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #6B46C1;
+}
+
+#reservation-form h2 {
+    color: #2D3748;
+    margin-bottom: 30px;
+    font-size: 2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+#selected-books-summary {
+    background: linear-gradient(135deg, #EBF8FF 0%, #E6FFFA 100%);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    border-left: 5px solid #3B82F6;
+}
+
+#selected-books-summary h3 {
+    color: #2D3748;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+#selected-books-summary ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+#selected-books-summary li {
+    margin: 8px 0;
+    color: #4A5568;
+    font-weight: 500;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+#book-reservation-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2D3748;
+    font-size: 1.1em;
+}
+
+.required::after {
+    content: " *";
+    color: #EF4444;
+    font-weight: bold;
+}
+
+#book-reservation-form input[type="text"],
+#book-reservation-form input[type="email"],
+#book-reservation-form input[type="tel"],
+#book-reservation-form textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #E2E8F0;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+}
+
+#book-reservation-form input:focus,
+#book-reservation-form textarea:focus {
+    outline: none;
+    border-color: #6B46C1;
+    box-shadow: 0 0 0 3px rgba(107, 70, 193, 0.1);
+    transform: translateY(-1px);
+}
+
+#book-reservation-form input.error,
+#book-reservation-form textarea.error {
+    border-color: #EF4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-message {
+    color: #EF4444;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none;
+}
+
+#book-reservation-form button[type="submit"] {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    padding: 18px 40px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+}
+
+#book-reservation-form button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+}
+
+#book-reservation-form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #2D3748 0%, #1A202C 100%);
+    color: white;
+    margin-top: 50px;
+}
+
+footer p {
+    font-size: 1em;
+    opacity: 0.8;
+}
+
+footer a {
+    color: #3B82F6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+footer a:hover {
+    color: #60A5FA;
+    text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+    
+    header p {
+        font-size: 1em;
+    }
+    
+    main {
+        margin: 20px;
+        padding: 30px 20px;
+        margin-top: -10px;
+    }
+    
+    #book-list {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .book-card {
+        padding: 20px;
+    }
+    
+    #reservation-form {
+        padding: 30px 20px;
+    }
+    
+    #reservation-form h2 {
+        font-size: 1.6em;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 1.5em 0;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    main {
+        margin: 10px;
+        padding: 20px 15px;
+    }
+    
+    .book-card img {
+        height: 200px;
+    }
+    
+    #reservation-form {
+        padding: 25px 15px;
+    }
+}
+
