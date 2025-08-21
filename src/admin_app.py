@@ -11,7 +11,7 @@ import json
 admin_app = Flask(__name__, static_folder='static', static_url_path='')
 
 # Configuração do banco de dados
-admin_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/app.db'
+admin_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////app/src/database/app.db'
 admin_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar extensões
@@ -351,12 +351,17 @@ ADMIN_TEMPLATE = '''
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="image">Nome da Imagem *</label>
-                        <input type="text" id="image" class="form-input" required placeholder="Ex: 20250821_114534.jpg">
+                        <label class="form-label" for="image">URL da Imagem *</label>
+                        <input type="url" id="image" class="form-input" required placeholder="https://exemplo.com/imagem.jpg">
                         <small style="color: #6B7280; margin-top: 5px; display: block;">
-                            Coloque a imagem na pasta /src/static/images/ e digite apenas o nome do arquivo
+                            Cole aqui o link direto da imagem (pode ser do Google Images, Amazon, etc.)
                         </small>
-                    </div>
+                        
+                        <!-- Preview da imagem -->
+                        <div id="image-preview" style="margin-top: 10px; display: none;">
+                            <img id="preview-img" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #E5E7EB;">
+                        </div>
+                    </div>                    
                     
                     <button type="submit" class="submit-btn">
                         ➕ Cadastrar Livro
@@ -517,7 +522,7 @@ ADMIN_TEMPLATE = '''
                 title: document.getElementById('title').value,
                 author: document.getElementById('author').value,
                 description: document.getElementById('description').value,
-                image: 'images/' + document.getElementById('image').value
+                image: document.getElementById('image').value
             };
             
             try {
@@ -558,7 +563,22 @@ ADMIN_TEMPLATE = '''
                 submitBtn.textContent = '➕ Cadastrar Livro';
             }
         });
-        
+
+        // Preview da imagem quando o usuário digitar a URL
+        document.getElementById('image').addEventListener('input', function(e) {
+            const url = e.target.value;
+            const preview = document.getElementById('image-preview');
+            const img = document.getElementById('preview-img');
+            
+            if (url && url.startsWith('http')) {
+                img.src = url;
+                img.onload = () => preview.style.display = 'block';
+                img.onerror = () => preview.style.display = 'none';
+            } else {
+                preview.style.display = 'none';
+            }
+        });        
+                
         // Função para formatar data
         function formatDate(dateString) {
             const date = new Date(dateString);
@@ -590,8 +610,9 @@ def admin_panel():
 def get_reservations():
     """Listar todas as reservas"""
     try:
-        reservations = Reservation.query.order_by(Reservation.created_at.desc()).all()
-        return jsonify([reservation.to_dict() for reservation in reservations]), 200
+        with admin_app.app_context():
+            reservations = Reservation.query.order_by(Reservation.created_at.desc()).all()
+            return jsonify([reservation.to_dict() for reservation in reservations]), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -599,21 +620,21 @@ def get_reservations():
 def cancel_reservation(reservation_id):
     """Cancelar uma reserva e tornar os livros disponíveis novamente"""
     try:
-        reservation = Reservation.query.get_or_404(reservation_id)
-        
-        # Buscar os livros da reserva e torná-los disponíveis
-        book_ids = json.loads(reservation.book_ids)
-        books = Book.query.filter(Book.id.in_(book_ids)).all()
-        
-        for book in books:
-            book.available = True
-        
-        # Remover a reserva
-        db.session.delete(reservation)
-        db.session.commit()
-        
-        return jsonify({'message': 'Reserva cancelada com sucesso', 'books_freed': len(books)}), 200
-        
+        with admin_app.app_context():
+            reservation = Reservation.query.get_or_404(reservation_id)
+            
+            # Buscar os livros da reserva e torná-los disponíveis
+            book_ids = json.loads(reservation.book_ids)
+            books = Book.query.filter(Book.id.in_(book_ids)).all()
+            
+            for book in books:
+                book.available = True
+            
+            # Remover a reserva
+            db.session.delete(reservation)
+            db.session.commit()
+            
+            return jsonify({'message': 'Reserva cancelada com sucesso', 'books_freed': len(books)}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
@@ -622,29 +643,37 @@ def cancel_reservation(reservation_id):
 def create_book():
     """Cadastrar um novo livro"""
     try:
-        data = request.get_json()
-        
-        if not all(key in data for key in ['title', 'author', 'description', 'image']):
-            return jsonify({'error': 'Campos obrigatórios: title, author, description, image'}), 400
-        
-        book = Book(
-            title=data['title'],
-            author=data['author'],
-            description=data['description'],
-            image=data['image'],
-            available=True
-        )
-        
-        db.session.add(book)
-        db.session.commit()
-        
-        return jsonify(book.to_dict()), 201
+        with admin_app.app_context():
+            data = request.get_json()
+            
+            if not all(key in data for key in ['title', 'author', 'description', 'image']):
+                return jsonify({'error': 'Campos obrigatórios: title, author, description, image'}), 400
+            
+            book = Book(
+                title=data['title'],
+                author=data['author'],
+                description=data['description'],
+                image=data['image'],
+                available=True
+            )
+            
+            db.session.add(book)
+            db.session.commit()
+            
+            return jsonify(book.to_dict()), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-#    with admin_app.app_context():
-#        db.create_all()
     admin_app.run(host='0.0.0.0', port=5001, debug=True)
 
+@admin_app.route('/debug')
+def debug():
+    try:
+        with admin_app.app_context():
+            from src.models.book import Book
+            count = Book.query.count()
+            return f"Livros no banco: {count}"
+    except Exception as e:
+        return f"Erro: {str(e)}"    
