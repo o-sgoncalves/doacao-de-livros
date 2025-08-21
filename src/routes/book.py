@@ -1,8 +1,67 @@
 from flask import Blueprint, request, jsonify
 from src.models.book import db, Book, Reservation
 import json
+import requests
+import os
+from datetime import datetime
 
 book_bp = Blueprint('book', __name__)
+
+# Configurações do Telegram
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'SEU_TOKEN_AQUI')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', 'SEU_CHAT_ID_AQUI')
+
+def send_telegram_notification(reservation_data):
+    """Envia notificação para o Telegram quando uma reserva é feita"""
+    try:
+        # Formatar lista de livros
+        books_list = "\n".join([
+            f"📘 {book['title']} - {book['author']}" 
+            for book in reservation_data['selected_books']
+        ])
+        
+        # Montar mensagem
+        message = f"""
+🔔 NOVA RESERVA DE LIVROS!
+
+👤 DADOS DO SOLICITANTE:
+• Nome: {reservation_data['name']}
+• Email: {reservation_data['email']}
+• Telefone: {reservation_data['phone']}
+
+📍 ENDEREÇO:
+{reservation_data['address']}
+
+📚 LIVROS RESERVADOS:
+{books_list}
+
+🆔 ID da Reserva: #{reservation_data['id']}
+⏰ Data: {datetime.now().strftime('%d/%m/%Y às %H:%M')}
+
+💬 Entre em contato para combinar o envio!
+        """.strip()
+        
+        # Enviar para o Telegram
+        url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+        payload = {
+            'chat_id': TELEGRAM_CHAT_ID,
+            'text': message,
+            'parse_mode': 'HTML'
+        }
+        
+        response = requests.post(url, json=payload, timeout=10)
+        
+        if response.status_code == 200:
+            print("✅ Notificação enviada para o Telegram com sucesso!")
+            return True
+        else:
+            print(f"❌ Erro ao enviar notificação: {response.status_code}")
+            print(response.text)
+            return False
+            
+    except Exception as e:
+        print(f"❌ Erro ao enviar notificação para Telegram: {str(e)}")
+        return False
 
 @book_bp.route('/books', methods=['GET'])
 def get_books():
@@ -64,7 +123,7 @@ def update_book(book_id):
 
 @book_bp.route('/reservations', methods=['POST'])
 def create_reservation():
-    """Cria uma nova reserva"""
+    """Cria uma nova reserva e envia notificação"""
     try:
         data = request.get_json()
         
@@ -100,7 +159,11 @@ def create_reservation():
         
         db.session.commit()
         
-        return jsonify(reservation.to_dict()), 201
+        # Preparar dados para notificação e enviar
+        reservation_dict = reservation.to_dict()
+        send_telegram_notification(reservation_dict)
+        
+        return jsonify(reservation_dict), 201
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
@@ -129,4 +192,3 @@ def update_reservation(reservation_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
-

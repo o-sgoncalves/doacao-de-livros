@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # Serviço principal (frontend + API)
   book-donation-app:
     build: .
     container_name: book-donation-app
@@ -9,7 +10,11 @@ services:
     volumes:
       - book_data:/app/src/database
     restart: unless-stopped
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
 
+  # Serviço de administração
   book-donation-admin:
     build: .
     container_name: book-donation-admin
@@ -21,7 +26,16 @@ services:
     command: ["python", "src/admin_app.py"]
     depends_on:
       - book-donation-app
-    # Aguarda o container principal estar rodando
-    
+
+  # Cloudflare Tunnel
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: book-donation-cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARED_TOKEN}
+    depends_on:
+      - book-donation-app
+      - book-donation-admin
+
 volumes:
   book_data:
