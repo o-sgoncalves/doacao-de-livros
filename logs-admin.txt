@@ -1,2 +1,0 @@
- * Serving Flask app 'admin_app'
- * Debug mode: on
